@@ -17,16 +17,6 @@ def dice_roll(no_of_die)
   roll_values
 end
 
-def dice_roll_non_scoring(non_scoring_dice_values)
-  puts "non_scoring_dice_values #{non_scoring_dice_values}"
-  roll_values = []
-  non_scoring_dice_values = (1..6).to_a if non_scoring_dice_values.size == 0
-  5.times do
-    roll_values << non_scoring_dice_values.sample
-  end
-  roll_values
-end
-
 def ask_for_player_choice(player_no, players)
   puts "Congrats player no. #{player_no + 1}! Your score is now - #{players[player_no].score}"
   if players[player_no].score >= 3000
@@ -56,6 +46,7 @@ end
 Players = []
 is_game_over = false
 winning_player_no = -1
+last_round_counter = 0
 
 puts "Enter the number of players- (cannot be less than 2)"
 no_of_players = Integer(gets.chomp)
@@ -73,12 +64,18 @@ loop do
   player_no = player_index.next
   no_of_die = 5
   roll_results = []
-
+  
   while player_no < no_of_players
     
-    if player_no == winning_player_no
+    if player_no == winning_player_no # => the winner is set and only one round is to be given to others
       player_no = player_index.next
       next
+    end
+
+    if is_game_over
+      last_round_counter -= 1
+      puts "Last round counter #{last_round_counter}"
+      break if last_round_counter == 0
     end
 
     dice_roll_values = Players[player_no].play_turn(no_of_die)
@@ -114,11 +111,12 @@ loop do
       next
     end
 
-    is_game_over = true if Players[player_no].score >= 3000
-
     if Players[player_no].score >= 3000
       is_game_over = true
       winning_player_no = player_no
+      last_round_counter = no_of_players
+      puts "The winning player is #{winning_player_no}"
+      puts "The no of rounds left is #{last_round_counter}"
     end
 
     player_no = player_index.next
@@ -129,8 +127,10 @@ loop do
 
   #puts is_game_over
   if is_game_over
-    puts "And the winners are -"
-    puts Players
+    puts "And the scores are -"
+    Players.each_with_index do |player, index|
+      puts "Player #{index + 1} - #{player.score}"
+    end
     abort("Game over!")
   end
 end
