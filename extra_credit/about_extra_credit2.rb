@@ -46,7 +46,7 @@ end
 Players = []
 is_game_over = false
 winning_player_no = -1
-last_round_counter = 0
+last_round_counter = -1
 
 puts "Enter the number of players- (cannot be less than 2)"
 no_of_players = Integer(gets.chomp)
@@ -72,11 +72,7 @@ loop do
       next
     end
 
-    if is_game_over
-      last_round_counter -= 1
-      puts "Last round counter #{last_round_counter}"
-      break if last_round_counter == 0
-    end
+    break if last_round_counter == 0
 
     dice_roll_values = Players[player_no].play_turn(no_of_die)
     
@@ -91,6 +87,7 @@ loop do
       Players[player_no].score = 0
       puts "You scored a zero! Sorry, your score has been reset! You loose your turn too!"
       puts # add a new line
+      last_round_counter -= 1 if is_game_over
       player_no = player_index.next # move to the next player
       no_of_die = 5
       next
@@ -111,14 +108,17 @@ loop do
       next
     end
 
-    if Players[player_no].score >= 3000
-      is_game_over = true
-      winning_player_no = player_no
-      last_round_counter = no_of_players
-      puts "The winning player is #{winning_player_no}"
-      puts "The no of rounds left is #{last_round_counter}"
+    if Players.count { |e| e.score >= 1000 } == 1 #=> Only one winner should've crossed 1000 points
+      if Players[player_no].score >= 1000 
+        is_game_over = true
+        winning_player_no = player_no
+        last_round_counter = no_of_players
+        puts "The winning player is #{winning_player_no}"
+        puts "The no of rounds left is #{last_round_counter}"
+      end
     end
 
+    last_round_counter -= 1 if is_game_over
     player_no = player_index.next
 
     puts "Press [Enter] to continue"
