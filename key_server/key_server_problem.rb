@@ -50,7 +50,11 @@ end
 
 # Endpoint to inspect a particular key (for dev purposes)
 get '/inspect/:key' do
-  "#{hash_of_keys[params[:key].to_sym].is_blocked?} #{hash_of_keys[params[:key].to_sym].last_blocked_time} #{hash_of_keys[params[:key].to_sym].last_keep_alive}"
+  unless hash_of_keys[params[:key]].nil?
+    "#{hash_of_keys[params[:key].to_sym].is_blocked?} #{hash_of_keys[params[:key].to_sym].last_blocked_time} #{hash_of_keys[params[:key].to_sym].last_keep_alive}"
+  else
+    "Key #{params[:key]} does not exist"
+  end
 end
 
 get '/fetch' do
