@@ -23,13 +23,15 @@ class KeyManager
   end
 
   def KeyManager.fetch_key(hash_keys)
-    random_api_key = hash_of_keys.keys.sample.to_sym #choose any random key
-    unless hash_of_keys[random_api_key].is_blocked?
-      hash_of_keys[random_api_key].last_blocked_time = Time.now
-      hash_of_keys[random_api_key].last_keep_alive = Time.now
+    random_api_key = "Error 404. Key not found."
+    hash_of_keys.keys.each do |key|
+    if hash_of_keys[key].is_blocked?
+      next
     else
-      random_api_key = SecureRandom.base64.gsub("/", "").to_sym
-      hash_of_keys[random_api_key] = KeyAttributes.new
+      random_api_key = key
+      hash_of_keys[key].last_keep_alive = Time.now
+      hash_of_keys[key].last_blocked_time = Time.now
+      return random_api_key 
     end
     random_api_key
   end
