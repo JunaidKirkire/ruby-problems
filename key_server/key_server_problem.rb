@@ -28,8 +28,8 @@ class KeyManager
       hash_of_keys[random_api_key].last_blocked_time = Time.now
       hash_of_keys[random_api_key].last_keep_alive = Time.now
     else
-      status 404
-      random_api_key = "Error 404. Key not found."
+      random_api_key = SecureRandom.base64.gsub("/", "").to_sym
+      hash_of_keys[random_api_key] = KeyAttributes.new
     end
     random_api_key
   end
