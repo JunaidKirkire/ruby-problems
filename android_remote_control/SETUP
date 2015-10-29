@@ -1,0 +1,7 @@
+In order to skip the first run's "Welcome Page", do the following steps -
+
+adb -s <device ID> shell 'echo "chrome --disable-fre" > /data/local/tmp/android-webview-command-line'
+adb -s <device ID> shell 'echo "chrome --disable-fre" > /data/local/tmp/content-shell-command-line'
+adb -s <device ID> shell 'echo "chrome --disable-fre" > /data/local/tmp/chrome-command-line'
+
+This needs to be done only once. It sets the command line options for Chrome browser which it picks up during start time.
