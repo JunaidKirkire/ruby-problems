@@ -17,9 +17,11 @@ end
 get '/stop' do
   device_id = params[:device_id]
   system("adb -s #{device_id} shell am force-stop com.android.chrome")
+  "Device #{device_id} stopped!"
 end
 
 get '/clean' do
   device_id = params[:device_id]
   system("adb -s #{device_id} shell pm clear com.android.chrome")
+  "Device #{device_id} cleaned!"
 end
